@@ -126,7 +126,7 @@ export function createMockConfig(
 
   mockConfig.getPolicyEngine = vi.fn().mockReturnValue({
     check: async () => {
-            const allowed = mockConfig.getAllowedTools?.() || [];
+      const allowed = mockConfig.getAllowedTools?.() || [];
       if (allowed.includes('*')) {
         return { decision: PolicyDecision.ALLOW };
       }

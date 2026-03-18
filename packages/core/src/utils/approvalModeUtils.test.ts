@@ -30,8 +30,6 @@ describe('approvalModeUtils', () => {
         'Plan mode (read-only planning)',
       );
     });
-
-    it('should return correct description for YOLO mode', () => {});
   });
 
   describe('getPlanModeExitMessage', () => {
@@ -46,7 +44,5 @@ describe('approvalModeUtils', () => {
         'User has manually exited Plan Mode. Switching to Auto-Edit mode (edits will be applied automatically).',
       );
     });
-
-    it('should default to non-manual message', () => {});
   });
 });

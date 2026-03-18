@@ -200,10 +200,6 @@ describe('GeminiAgent Session Resume', () => {
             description: 'Auto-approves edit tools',
           },
           {
-            name: 'YOLO',
-            description: 'Auto-approves all tools',
-          },
-          {
             id: ApprovalMode.PLAN,
             name: 'Plan',
             description: 'Read-only mode',

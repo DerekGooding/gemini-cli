@@ -40,8 +40,6 @@ import {
   AuthType,
   GeminiEventType as ServerGeminiEventType,
   ToolErrorType,
-  ToolConfirmationOutcome,
-  MessageBusType,
   tokenLimit,
   debugLogger,
   coreEvents,
@@ -2072,35 +2070,6 @@ describe('useGeminiStream', () => {
   });
 
   describe('handleApprovalModeChange', () => {
-    it('should auto-approve all pending tool calls when switching to YOLO mode', async () => {
-      const awaitingApprovalToolCalls: TrackedToolCall[] = [
-        createMockToolCall('replace', 'call1', 'edit'),
-        createMockToolCall('read_file', 'call2', 'info'),
-      ];
-
-      const { result } = renderTestHook(awaitingApprovalToolCalls);
-
-      await act(async () => {
-        await result.current.handleApprovalModeChange(ApprovalMode.AUTO_EDIT);
-      });
-
-      // Both tool calls should be auto-approved
-      expect(mockMessageBus.publish).toHaveBeenCalledTimes(2);
-      expect(mockMessageBus.publish).toHaveBeenCalledWith(
-        expect.objectContaining({
-          type: MessageBusType.TOOL_CONFIRMATION_RESPONSE,
-          correlationId: 'corr-call1',
-          outcome: ToolConfirmationOutcome.ProceedOnce,
-        }),
-      );
-      expect(mockMessageBus.publish).toHaveBeenCalledWith(
-        expect.objectContaining({
-          correlationId: 'corr-call2',
-          outcome: ToolConfirmationOutcome.ProceedOnce,
-        }),
-      );
-    });
-
     it('should only auto-approve edit tools when switching to AUTO_EDIT mode', async () => {
       const awaitingApprovalToolCalls: TrackedToolCall[] = [
         createMockToolCall('replace', 'call1', 'edit'),

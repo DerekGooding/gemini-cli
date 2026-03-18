@@ -303,14 +303,10 @@ function createMockConfig(overrides: Partial<Config> = {}): Config {
           _serverName?: string,
         ) => {
           // Mock simple policy logic for tests
-          const mode = finalConfig.getApprovalMode();
-          if (
-            mode === ApprovalMode.DEFAULT ||
-            mode === ApprovalMode.AUTO_EDIT
-          ) {
+          const allowed = finalConfig.getAllowedTools();
+          if (allowed?.includes('*')) {
             return { decision: PolicyDecision.ALLOW };
           }
-          const allowed = finalConfig.getAllowedTools();
           if (
             allowed &&
             (allowed.includes(toolCall.name) ||
@@ -995,7 +991,7 @@ describe('CoreToolScheduler YOLO mode', () => {
     // Configure the scheduler for YOLO mode.
     const mockConfig = createMockConfig({
       getToolRegistry: () => mockToolRegistry,
-      getApprovalMode: () => ApprovalMode.AUTO_EDIT,
+      getAllowedTools: () => ['*'],
       isInteractive: () => false,
     });
     const mockMessageBus = createMockMessageBus();
@@ -1087,7 +1083,7 @@ describe('CoreToolScheduler request queueing', () => {
 
     const mockConfig = createMockConfig({
       getToolRegistry: () => mockToolRegistry,
-      getApprovalMode: () => ApprovalMode.AUTO_EDIT, // Use YOLO to avoid confirmation prompts
+      getAllowedTools: () => ['*'], // Use YOLO to avoid confirmation prompts
       isInteractive: () => false,
     });
     const mockMessageBus = createMockMessageBus();
@@ -1388,7 +1384,7 @@ describe('CoreToolScheduler request queueing', () => {
 
     const mockConfig = createMockConfig({
       getToolRegistry: () => mockToolRegistry,
-      getApprovalMode: () => ApprovalMode.AUTO_EDIT,
+      getAllowedTools: () => ['*'],
     });
     const mockMessageBus = createMockMessageBus();
     mockConfig.getMessageBus = vi.fn().mockReturnValue(mockMessageBus);
@@ -1626,7 +1622,7 @@ describe('CoreToolScheduler Sequential Execution', () => {
 
     const mockConfig = createMockConfig({
       getToolRegistry: () => mockToolRegistry,
-      getApprovalMode: () => ApprovalMode.AUTO_EDIT, // Use YOLO to avoid confirmation prompts
+      getAllowedTools: () => ['*'], // Use YOLO to avoid confirmation prompts
       isInteractive: () => false,
     });
     const mockMessageBus = createMockMessageBus();
@@ -1731,7 +1727,7 @@ describe('CoreToolScheduler Sequential Execution', () => {
 
     const mockConfig = createMockConfig({
       getToolRegistry: () => mockToolRegistry,
-      getApprovalMode: () => ApprovalMode.AUTO_EDIT,
+      getAllowedTools: () => ['*'],
       isInteractive: () => false,
     });
     const mockMessageBus = createMockMessageBus();
@@ -2075,7 +2071,7 @@ describe('CoreToolScheduler Sequential Execution', () => {
 
     const mockConfig = createMockConfig({
       getToolRegistry: () => mockToolRegistry,
-      getApprovalMode: () => ApprovalMode.AUTO_EDIT,
+      getAllowedTools: () => ['*'],
       isInteractive: () => false,
     });
     const mockMessageBus = createMockMessageBus();
@@ -2149,7 +2145,7 @@ describe('CoreToolScheduler Sequential Execution', () => {
 
     const mockConfig = createMockConfig({
       getToolRegistry: () => mockToolRegistry,
-      getApprovalMode: () => ApprovalMode.AUTO_EDIT,
+      getAllowedTools: () => ['*'],
       isInteractive: () => false,
     });
     mockConfig.getHookSystem = vi.fn().mockReturnValue(undefined);

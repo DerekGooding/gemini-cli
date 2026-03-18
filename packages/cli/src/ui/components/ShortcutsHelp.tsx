@@ -64,16 +64,14 @@ export const ShortcutsHelp: React.FC = () => {
   const itemsForDisplay = isNarrow
     ? items
     : [
-        // Keep first column stable: !, @, Esc Esc, Tab Tab.
         items[0],
-        items[5],
-        items[6],
-        items[1],
         items[4],
-        items[7],
+        items[5],
+        items[1],
+        items[6],
         items[2],
+        items[7],
         items[8],
-        items[9],
         items[3],
       ];
 

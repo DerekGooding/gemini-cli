@@ -37,8 +37,6 @@ describe('ApprovalModeIndicator', () => {
     expect(lastFrame()).toMatchSnapshot();
   });
 
-  
-
   it('renders correctly for DEFAULT mode', async () => {
     const { lastFrame, waitUntilReady } = render(
       <ApprovalModeIndicator approvalMode={ApprovalMode.DEFAULT} />,

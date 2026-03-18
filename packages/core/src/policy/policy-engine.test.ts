@@ -335,22 +335,25 @@ describe('PolicyEngine', () => {
       );
     });
 
-    it('should return ALLOW by default in AUTO_EDIT mode when no rules match', async () => {
-      engine = new PolicyEngine({ approvalMode: ApprovalMode.AUTO_EDIT });
+    it('should return ALLOW by default when a wildcard ALLOW rule exists', async () => {
+      engine = new PolicyEngine({
+        rules: [{ toolName: '*', decision: PolicyDecision.ALLOW, priority: 1 }],
+      });
 
-      // No rules defined, should return ALLOW in YOLO mode
       const { decision } = await engine.check({ name: 'any-tool' }, undefined);
       expect(decision).toBe(PolicyDecision.ALLOW);
     });
 
-    it('should NOT override explicit DENY rules in AUTO_EDIT mode', async () => {
+    it('should NOT override explicit DENY rules when a wildcard rule exists', async () => {
       const rules: PolicyRule[] = [
-        { toolName: 'dangerous-tool', decision: PolicyDecision.DENY },
+        { toolName: '*', decision: PolicyDecision.ALLOW, priority: 1 },
+        {
+          toolName: 'dangerous-tool',
+          decision: PolicyDecision.DENY,
+          priority: 10,
+        },
       ];
-      engine = new PolicyEngine({
-        rules,
-        approvalMode: ApprovalMode.AUTO_EDIT,
-      });
+      engine = new PolicyEngine({ rules });
 
       const { decision } = await engine.check(
         { name: 'dangerous-tool' },
@@ -364,21 +367,18 @@ describe('PolicyEngine', () => {
       ).toBe(PolicyDecision.ALLOW);
     });
 
-    it('should respect rule priority in AUTO_EDIT mode when a match exists', async () => {
+    it('should respect rule priority when a wildcard match exists', async () => {
       const rules: PolicyRule[] = [
         {
-          toolName: 'test-tool',
-          decision: PolicyDecision.ASK_USER,
+          toolName: '*',
+          decision: PolicyDecision.ALLOW,
           priority: 10,
         },
         { toolName: 'test-tool', decision: PolicyDecision.DENY, priority: 20 },
       ];
-      engine = new PolicyEngine({
-        rules,
-        approvalMode: ApprovalMode.AUTO_EDIT,
-      });
+      engine = new PolicyEngine({ rules });
 
-      // Priority 20 (DENY) should win over priority 10 (ASK_USER)
+      // Priority 20 (DENY) should win over priority 10 (ALLOW)
       const { decision } = await engine.check({ name: 'test-tool' }, undefined);
       expect(decision).toBe(PolicyDecision.DENY);
     });
@@ -1643,13 +1643,13 @@ describe('PolicyEngine', () => {
   });
 
   describe('shell command parsing failure', () => {
-    it('should return ALLOW in YOLO mode even if shell command parsing fails', async () => {
+    it('should return ALLOW when using wildcard policy even if shell command parsing fails', async () => {
       const { splitCommands } = await import('../utils/shell-utils.js');
       const rules: PolicyRule[] = [
         {
+          toolName: '*',
           decision: PolicyDecision.ALLOW,
           priority: 999,
-          modes: [ApprovalMode.AUTO_EDIT],
         },
         {
           toolName: 'run_shell_command',
@@ -1658,10 +1658,7 @@ describe('PolicyEngine', () => {
         },
       ];
 
-      engine = new PolicyEngine({
-        rules,
-        approvalMode: ApprovalMode.AUTO_EDIT,
-      });
+      engine = new PolicyEngine({ rules });
 
       // Simulate parsing failure (splitCommands returning empty array)
       vi.mocked(splitCommands).mockReturnValueOnce([]);
@@ -1676,7 +1673,7 @@ describe('PolicyEngine', () => {
       expect(result.rule?.priority).toBe(999);
     });
 
-    it('should return DENY in YOLO mode if shell command parsing fails and a higher priority rule says DENY', async () => {
+    it('should return DENY when using wildcard policy if shell command parsing fails and a higher priority rule says DENY', async () => {
       const { splitCommands } = await import('../utils/shell-utils.js');
       const rules: PolicyRule[] = [
         {
@@ -1685,16 +1682,13 @@ describe('PolicyEngine', () => {
           priority: 2000, // Very high priority DENY (e.g. Admin)
         },
         {
+          toolName: '*',
           decision: PolicyDecision.ALLOW,
           priority: 999,
-          modes: [ApprovalMode.AUTO_EDIT],
         },
       ];
 
-      engine = new PolicyEngine({
-        rules,
-        approvalMode: ApprovalMode.AUTO_EDIT,
-      });
+      engine = new PolicyEngine({ rules });
 
       // Simulate parsing failure
       vi.mocked(splitCommands).mockReturnValueOnce([]);

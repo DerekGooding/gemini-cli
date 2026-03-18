@@ -154,9 +154,6 @@ export const Help: React.FC<Help> = ({ commands }) => (
       - Open input in external editor
     </Text>
     <Text color={theme.text.primary}>
-      <Text bold color={theme.text.accent}></Text> - Toggle YOLO mode
-    </Text>
-    <Text color={theme.text.primary}>
       <Text bold color={theme.text.accent}>
         {formatCommand(Command.SUBMIT)}
       </Text>{' '}

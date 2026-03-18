@@ -1455,7 +1455,6 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
 
   const showAutoAcceptStyling =
     !shellModeActive && approvalMode === ApprovalMode.AUTO_EDIT;
-  const showYoloStyling = false;
   const showPlanStyling =
     !shellModeActive && approvalMode === ApprovalMode.PLAN;
 
@@ -1464,9 +1463,6 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
   if (shellModeActive) {
     statusColor = theme.ui.symbol;
     statusText = 'Shell mode';
-  } else if (showYoloStyling) {
-    statusColor = theme.status.error;
-    statusText = 'YOLO mode';
   } else if (showPlanStyling) {
     statusColor = theme.status.success;
     statusText = 'Plan mode';
@@ -1554,8 +1550,6 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
               )
             ) : commandSearchActive ? (
               <Text color={theme.text.accent}>(r:) </Text>
-            ) : showYoloStyling ? (
-              '*'
             ) : (
               '>'
             )}{' '}
