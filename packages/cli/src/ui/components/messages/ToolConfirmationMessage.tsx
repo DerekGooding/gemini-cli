@@ -43,6 +43,8 @@ import {
   type DeceptiveUrlDetails,
 } from '../../utils/urlSecurityUtils.js';
 import { useKeyMatchers } from '../../hooks/useKeyMatchers.js';
+import { canShowAutoApproveCheckbox } from '../../utils/commandAllowlist.js';
+import { ApprovalMode } from '@google/gemini-cli-core';
 
 export interface ToolConfirmationMessageProps {
   callId: string;
@@ -284,7 +286,15 @@ export const ToolConfirmationMessage: React.FC<
           value: ToolConfirmationOutcome.ProceedAlways,
           key: `Allow for this session`,
         });
-        if (allowPermanentApproval) {
+
+        const isAcceptEditsActive =
+          config.getApprovalMode() === ApprovalMode.AUTO_EDIT;
+        const canAutoApprove = canShowAutoApproveCheckbox(
+          confirmationDetails.command,
+          isAcceptEditsActive,
+        );
+
+        if (allowPermanentApproval && canAutoApprove) {
           options.push({
             label: `Allow this command for all future sessions`,
             value: ToolConfirmationOutcome.ProceedAlwaysAndSave,

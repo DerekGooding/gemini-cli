@@ -11,6 +11,7 @@ import type {
   ToolCallConfirmationDetails,
   Config,
 } from '@google/gemini-cli-core';
+import { ApprovalMode } from '@google/gemini-cli-core';
 import { renderWithProviders } from '../../../test-utils/render.js';
 import { createMockSettings } from '../../../test-utils/settings.js';
 import { useToolActions } from '../../contexts/ToolActionsContext.js';
@@ -38,6 +39,7 @@ describe('ToolConfirmationMessage', () => {
     isTrustedFolder: () => true,
     getIdeMode: () => false,
     getDisableAlwaysAllow: () => false,
+    getApprovalMode: () => ApprovalMode.DEFAULT,
   } as unknown as Config;
 
   it('should not display urls if prompt and url are the same', async () => {
@@ -333,6 +335,7 @@ describe('ToolConfirmationMessage', () => {
           isTrustedFolder: () => true,
           getIdeMode: () => false,
           getDisableAlwaysAllow: () => false,
+          getApprovalMode: () => ApprovalMode.DEFAULT,
         } as unknown as Config;
         const { lastFrame, waitUntilReady, unmount } = renderWithProviders(
           <ToolConfirmationMessage
@@ -355,6 +358,7 @@ describe('ToolConfirmationMessage', () => {
           isTrustedFolder: () => false,
           getIdeMode: () => false,
           getDisableAlwaysAllow: () => false,
+          getApprovalMode: () => ApprovalMode.DEFAULT,
         } as unknown as Config;
 
         const { lastFrame, waitUntilReady, unmount } = renderWithProviders(
@@ -391,6 +395,7 @@ describe('ToolConfirmationMessage', () => {
         isTrustedFolder: () => true,
         getIdeMode: () => false,
         getDisableAlwaysAllow: () => false,
+        getApprovalMode: () => ApprovalMode.DEFAULT,
       } as unknown as Config;
       const { lastFrame, waitUntilReady, unmount } = renderWithProviders(
         <ToolConfirmationMessage
@@ -418,6 +423,7 @@ describe('ToolConfirmationMessage', () => {
         isTrustedFolder: () => true,
         getIdeMode: () => false,
         getDisableAlwaysAllow: () => false,
+        getApprovalMode: () => ApprovalMode.DEFAULT,
       } as unknown as Config;
       const { lastFrame, waitUntilReady, unmount } = renderWithProviders(
         <ToolConfirmationMessage
@@ -460,6 +466,7 @@ describe('ToolConfirmationMessage', () => {
         isTrustedFolder: () => true,
         getIdeMode: () => false,
         getDisableAlwaysAllow: () => false,
+        getApprovalMode: () => ApprovalMode.DEFAULT,
       } as unknown as Config;
       vi.mocked(useToolActions).mockReturnValue({
         confirm: vi.fn(),
@@ -488,6 +495,7 @@ describe('ToolConfirmationMessage', () => {
         isTrustedFolder: () => true,
         getIdeMode: () => true,
         getDisableAlwaysAllow: () => false,
+        getApprovalMode: () => ApprovalMode.DEFAULT,
       } as unknown as Config;
       vi.mocked(useToolActions).mockReturnValue({
         confirm: vi.fn(),
@@ -516,6 +524,7 @@ describe('ToolConfirmationMessage', () => {
         isTrustedFolder: () => true,
         getIdeMode: () => true,
         getDisableAlwaysAllow: () => false,
+        getApprovalMode: () => ApprovalMode.DEFAULT,
       } as unknown as Config;
       vi.mocked(useToolActions).mockReturnValue({
         confirm: vi.fn(),
