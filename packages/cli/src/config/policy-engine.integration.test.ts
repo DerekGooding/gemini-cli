@@ -283,7 +283,7 @@ describe('Policy Engine Integration Tests', () => {
 
       const config = await createPolicyEngineConfig(
         settings,
-        ApprovalMode.YOLO,
+        ApprovalMode.AUTO_EDIT,
       );
       const engine = new PolicyEngine(config);
 

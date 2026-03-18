@@ -72,12 +72,12 @@ export async function loadConfig(
 
     coreTools: settings.coreTools || settings.tools?.core || undefined,
     excludeTools: settings.excludeTools || settings.tools?.exclude || undefined,
-    allowedTools: settings.allowedTools || settings.tools?.allowed || undefined,
-    showMemoryUsage: settings.showMemoryUsage || false,
-    approvalMode:
+    allowedTools:
       process.env['GEMINI_YOLO_MODE'] === 'true'
-        ? ApprovalMode.YOLO
-        : ApprovalMode.DEFAULT,
+        ? [...(settings.allowedTools || settings.tools?.allowed || []), '*']
+        : settings.allowedTools || settings.tools?.allowed || undefined,
+    showMemoryUsage: settings.showMemoryUsage || false,
+    approvalMode: ApprovalMode.DEFAULT,
     mcpServers: settings.mcpServers,
     cwd: workspaceDir,
     telemetry: {

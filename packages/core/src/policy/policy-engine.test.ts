@@ -335,19 +335,22 @@ describe('PolicyEngine', () => {
       );
     });
 
-    it('should return ALLOW by default in YOLO mode when no rules match', async () => {
-      engine = new PolicyEngine({ approvalMode: ApprovalMode.YOLO });
+    it('should return ALLOW by default in AUTO_EDIT mode when no rules match', async () => {
+      engine = new PolicyEngine({ approvalMode: ApprovalMode.AUTO_EDIT });
 
       // No rules defined, should return ALLOW in YOLO mode
       const { decision } = await engine.check({ name: 'any-tool' }, undefined);
       expect(decision).toBe(PolicyDecision.ALLOW);
     });
 
-    it('should NOT override explicit DENY rules in YOLO mode', async () => {
+    it('should NOT override explicit DENY rules in AUTO_EDIT mode', async () => {
       const rules: PolicyRule[] = [
         { toolName: 'dangerous-tool', decision: PolicyDecision.DENY },
       ];
-      engine = new PolicyEngine({ rules, approvalMode: ApprovalMode.YOLO });
+      engine = new PolicyEngine({
+        rules,
+        approvalMode: ApprovalMode.AUTO_EDIT,
+      });
 
       const { decision } = await engine.check(
         { name: 'dangerous-tool' },
@@ -361,7 +364,7 @@ describe('PolicyEngine', () => {
       ).toBe(PolicyDecision.ALLOW);
     });
 
-    it('should respect rule priority in YOLO mode when a match exists', async () => {
+    it('should respect rule priority in AUTO_EDIT mode when a match exists', async () => {
       const rules: PolicyRule[] = [
         {
           toolName: 'test-tool',
@@ -370,7 +373,10 @@ describe('PolicyEngine', () => {
         },
         { toolName: 'test-tool', decision: PolicyDecision.DENY, priority: 20 },
       ];
-      engine = new PolicyEngine({ rules, approvalMode: ApprovalMode.YOLO });
+      engine = new PolicyEngine({
+        rules,
+        approvalMode: ApprovalMode.AUTO_EDIT,
+      });
 
       // Priority 20 (DENY) should win over priority 10 (ASK_USER)
       const { decision } = await engine.check({ name: 'test-tool' }, undefined);
@@ -1643,7 +1649,7 @@ describe('PolicyEngine', () => {
         {
           decision: PolicyDecision.ALLOW,
           priority: 999,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
         {
           toolName: 'run_shell_command',
@@ -1654,7 +1660,7 @@ describe('PolicyEngine', () => {
 
       engine = new PolicyEngine({
         rules,
-        approvalMode: ApprovalMode.YOLO,
+        approvalMode: ApprovalMode.AUTO_EDIT,
       });
 
       // Simulate parsing failure (splitCommands returning empty array)
@@ -1681,13 +1687,13 @@ describe('PolicyEngine', () => {
         {
           decision: PolicyDecision.ALLOW,
           priority: 999,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
       ];
 
       engine = new PolicyEngine({
         rules,
-        approvalMode: ApprovalMode.YOLO,
+        approvalMode: ApprovalMode.AUTO_EDIT,
       });
 
       // Simulate parsing failure
@@ -2316,16 +2322,16 @@ describe('PolicyEngine', () => {
           {
             decision: PolicyDecision.ALLOW,
             priority: 999,
-            modes: [ApprovalMode.YOLO],
+            modes: [ApprovalMode.AUTO_EDIT],
           },
           {
             toolName: 'dangerous-tool',
             decision: PolicyDecision.DENY,
             priority: 10,
-            modes: [ApprovalMode.YOLO],
+            modes: [ApprovalMode.AUTO_EDIT],
           },
         ],
-        approvalMode: ApprovalMode.YOLO,
+        approvalMode: ApprovalMode.AUTO_EDIT,
         allToolNames: ['dangerous-tool', 'safe-tool'],
         expected: [],
       },
@@ -2848,18 +2854,18 @@ describe('PolicyEngine', () => {
           toolName: 'ask_user',
           decision: PolicyDecision.ASK_USER,
           priority: 999,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
         {
           decision: PolicyDecision.ALLOW,
           priority: 998,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
       ];
 
       engine = new PolicyEngine({
         rules,
-        approvalMode: ApprovalMode.YOLO,
+        approvalMode: ApprovalMode.AUTO_EDIT,
       });
 
       const result = await engine.check(
@@ -2875,18 +2881,18 @@ describe('PolicyEngine', () => {
           toolName: 'ask_user',
           decision: PolicyDecision.ASK_USER,
           priority: 999,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
         {
           decision: PolicyDecision.ALLOW,
           priority: 998,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
       ];
 
       engine = new PolicyEngine({
         rules,
-        approvalMode: ApprovalMode.YOLO,
+        approvalMode: ApprovalMode.AUTO_EDIT,
       });
 
       const result = await engine.check(
@@ -2984,19 +2990,19 @@ describe('PolicyEngine', () => {
           toolName: 'enter_plan_mode',
           decision: PolicyDecision.DENY,
           priority: 999,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
         {
           toolName: 'exit_plan_mode',
           decision: PolicyDecision.DENY,
           priority: 999,
-          modes: [ApprovalMode.YOLO],
+          modes: [ApprovalMode.AUTO_EDIT],
         },
       ];
 
       engine = new PolicyEngine({
         rules,
-        approvalMode: ApprovalMode.YOLO,
+        approvalMode: ApprovalMode.AUTO_EDIT,
       });
 
       const resultEnter = await engine.check(

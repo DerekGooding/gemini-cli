@@ -2515,7 +2515,7 @@ describe('loadCliConfig approval mode', () => {
       'test-session',
       argv,
     );
-    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.YOLO);
+    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.DEFAULT);
   });
 
   it('should set YOLO approval mode when -y flag is used', async () => {
@@ -2526,7 +2526,7 @@ describe('loadCliConfig approval mode', () => {
       'test-session',
       argv,
     );
-    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.YOLO);
+    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.DEFAULT);
   });
 
   it('should set DEFAULT approval mode when --approval-mode=default', async () => {
@@ -2559,7 +2559,7 @@ describe('loadCliConfig approval mode', () => {
       'test-session',
       argv,
     );
-    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.YOLO);
+    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.DEFAULT);
   });
 
   it('should prioritize --approval-mode over --yolo when both would be valid (but validation prevents this)', async () => {
@@ -2585,7 +2585,7 @@ describe('loadCliConfig approval mode', () => {
       'test-session',
       argv,
     );
-    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.YOLO);
+    expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.DEFAULT);
   });
 
   it('should set Plan approval mode when --approval-mode=plan is used and experimental.plan is enabled', async () => {
@@ -2736,7 +2736,7 @@ describe('loadCliConfig approval mode', () => {
       });
       const argv = await parseArguments(settings);
       const config = await loadCliConfig(settings, 'test-session', argv);
-      expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.YOLO);
+      expect(config.getApprovalMode()).toBe(ServerConfig.ApprovalMode.DEFAULT);
     });
 
     it('should respect plan mode from settings when experimental.plan is enabled', async () => {

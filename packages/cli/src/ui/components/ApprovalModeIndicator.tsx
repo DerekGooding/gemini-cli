@@ -25,7 +25,6 @@ export const ApprovalModeIndicator: React.FC<ApprovalModeIndicatorProps> = ({
   let subText = '';
 
   const cycleHint = formatCommand(Command.CYCLE_APPROVAL_MODE);
-  const yoloHint = formatCommand(Command.TOGGLE_YOLO);
 
   switch (approvalMode) {
     case ApprovalMode.AUTO_EDIT:
@@ -39,11 +38,6 @@ export const ApprovalModeIndicator: React.FC<ApprovalModeIndicatorProps> = ({
       textColor = theme.status.success;
       textContent = 'plan';
       subText = `${cycleHint} to manual`;
-      break;
-    case ApprovalMode.YOLO:
-      textColor = theme.status.error;
-      textContent = 'YOLO';
-      subText = yoloHint;
       break;
     case ApprovalMode.DEFAULT:
     default:

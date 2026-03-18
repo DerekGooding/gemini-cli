@@ -621,7 +621,6 @@ describe('Composer', () => {
       [ApprovalMode.DEFAULT],
       [ApprovalMode.AUTO_EDIT],
       [ApprovalMode.PLAN],
-      [ApprovalMode.YOLO],
     ])(
       'shows ApprovalModeIndicator when approval mode is %s and shell mode is inactive',
       async (mode) => {
@@ -667,7 +666,6 @@ describe('Composer', () => {
     });
 
     it.each([
-      [ApprovalMode.YOLO, 'YOLO'],
       [ApprovalMode.PLAN, 'plan'],
       [ApprovalMode.AUTO_EDIT, 'auto edit'],
     ])(
@@ -945,7 +943,7 @@ describe('Composer', () => {
 
       const uiState = createMockUIState({
         cleanUiDetailsVisible: true,
-        showApprovalModeIndicator: ApprovalMode.YOLO,
+        showApprovalModeIndicator: ApprovalMode.AUTO_EDIT,
       });
 
       const { lastFrame } = await renderComposer(uiState);

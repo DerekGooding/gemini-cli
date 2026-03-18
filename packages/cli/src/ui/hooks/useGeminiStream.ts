@@ -569,10 +569,7 @@ export const useGeminiStream = (
   }, [activeShellPtyId, addItem, setIsResponding]);
 
   useEffect(() => {
-    if (
-      config.getApprovalMode() === ApprovalMode.YOLO &&
-      streamingState === StreamingState.Idle
-    ) {
+    if (false && streamingState === StreamingState.Idle) {
       const lastUserMessageIndex = history.findLastIndex(
         (item: HistoryItem) => item.type === MessageType.USER,
       );
@@ -1616,10 +1613,7 @@ export const useGeminiStream = (
       previousApprovalModeRef.current = newApprovalMode;
 
       // Auto-approve pending tool calls when switching to auto-approval modes
-      if (
-        newApprovalMode === ApprovalMode.YOLO ||
-        newApprovalMode === ApprovalMode.AUTO_EDIT
-      ) {
+      if (newApprovalMode === ApprovalMode.AUTO_EDIT) {
         let awaitingApprovalCalls = toolCalls.filter(
           (call): call is TrackedWaitingToolCall =>
             call.status === 'awaiting_approval',

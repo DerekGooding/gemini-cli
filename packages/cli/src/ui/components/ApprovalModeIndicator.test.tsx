@@ -37,13 +37,7 @@ describe('ApprovalModeIndicator', () => {
     expect(lastFrame()).toMatchSnapshot();
   });
 
-  it('renders correctly for YOLO mode', async () => {
-    const { lastFrame, waitUntilReady } = render(
-      <ApprovalModeIndicator approvalMode={ApprovalMode.YOLO} />,
-    );
-    await waitUntilReady();
-    expect(lastFrame()).toMatchSnapshot();
-  });
+  
 
   it('renders correctly for DEFAULT mode', async () => {
     const { lastFrame, waitUntilReady } = render(

@@ -23,7 +23,7 @@ const buildShortcutItems = (): ShortcutItem[] => [
   { key: '@', description: 'select file or folder' },
   { key: 'Double Esc', description: 'clear & rewind' },
   { key: formatCommand(Command.FOCUS_SHELL_INPUT), description: 'focus UI' },
-  { key: formatCommand(Command.TOGGLE_YOLO), description: 'YOLO mode' },
+
   {
     key: formatCommand(Command.CYCLE_APPROVAL_MODE),
     description: 'cycle mode',

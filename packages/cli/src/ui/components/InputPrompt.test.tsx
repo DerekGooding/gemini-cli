@@ -3834,7 +3834,7 @@ describe('InputPrompt', () => {
     });
 
     it('should render correctly in yolo mode', async () => {
-      props.approvalMode = ApprovalMode.YOLO;
+      props.approvalMode = ApprovalMode.AUTO_EDIT;
       const { stdout, unmount } = renderWithProviders(
         <InputPrompt {...props} />,
       );

@@ -409,7 +409,6 @@ Ask the user for specific feedback on how to improve the plan.`,
         ).rejects.toThrow(/Unexpected approval mode/);
       };
 
-      await testInvalidMode(ApprovalMode.YOLO);
       await testInvalidMode(ApprovalMode.PLAN);
     });
   });

@@ -117,9 +117,6 @@ export const Composer = ({ isFocused = true }: { isFocused?: boolean }) => {
   const showRawMarkdownIndicator = !uiState.renderMarkdown;
   let modeBleedThrough: { text: string; color: string } | null = null;
   switch (showApprovalModeIndicator) {
-    case ApprovalMode.YOLO:
-      modeBleedThrough = { text: 'YOLO', color: theme.status.error };
-      break;
     case ApprovalMode.PLAN:
       modeBleedThrough = { text: 'plan', color: theme.status.success };
       break;

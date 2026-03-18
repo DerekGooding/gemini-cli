@@ -162,18 +162,6 @@ describe('useApprovalModeIndicator', () => {
     expect(mockConfigInstance.getApprovalMode).toHaveBeenCalledTimes(1);
   });
 
-  it('should initialize with ApprovalMode.YOLO if config.getApprovalMode returns ApprovalMode.YOLO', () => {
-    mockConfigInstance.getApprovalMode.mockReturnValue(ApprovalMode.YOLO);
-    const { result } = renderHook(() =>
-      useApprovalModeIndicator({
-        config: mockConfigInstance as unknown as ActualConfigType,
-        addItem: vi.fn(),
-      }),
-    );
-    expect(result.current).toBe(ApprovalMode.YOLO);
-    expect(mockConfigInstance.getApprovalMode).toHaveBeenCalledTimes(1);
-  });
-
   it('should cycle the indicator and update config when Shift+Tab or Ctrl+Y is pressed', () => {
     mockConfigInstance.getApprovalMode.mockReturnValue(ApprovalMode.DEFAULT);
     const { result } = renderHook(() =>
@@ -200,9 +188,9 @@ describe('useApprovalModeIndicator', () => {
       capturedUseKeypressHandler({ name: 'y', ctrl: true } as Key);
     });
     expect(mockConfigInstance.setApprovalMode).toHaveBeenCalledWith(
-      ApprovalMode.YOLO,
+      ApprovalMode.AUTO_EDIT,
     );
-    expect(result.current).toBe(ApprovalMode.YOLO);
+    expect(result.current).toBe(ApprovalMode.AUTO_EDIT);
 
     // Shift+Tab cycles back to AUTO_EDIT (from YOLO)
     act(() => {
@@ -221,9 +209,9 @@ describe('useApprovalModeIndicator', () => {
       capturedUseKeypressHandler({ name: 'y', ctrl: true } as Key);
     });
     expect(mockConfigInstance.setApprovalMode).toHaveBeenCalledWith(
-      ApprovalMode.YOLO,
+      ApprovalMode.AUTO_EDIT,
     );
-    expect(result.current).toBe(ApprovalMode.YOLO);
+    expect(result.current).toBe(ApprovalMode.AUTO_EDIT);
 
     // Shift+Tab from YOLO jumps to AUTO_EDIT
     act(() => {
@@ -349,7 +337,7 @@ describe('useApprovalModeIndicator', () => {
 
       // We expect setApprovalMode to be called, and the error to be caught.
       expect(mockConfigInstance.setApprovalMode).toHaveBeenCalledWith(
-        ApprovalMode.YOLO,
+        ApprovalMode.AUTO_EDIT,
       );
       expect(mockAddItem).toHaveBeenCalled();
       // Verify the underlying config value was not changed
@@ -390,7 +378,9 @@ describe('useApprovalModeIndicator', () => {
     });
 
     it('should disable YOLO mode when Ctrl+Y is pressed', () => {
-      mockConfigInstance.getApprovalMode.mockReturnValue(ApprovalMode.YOLO);
+      mockConfigInstance.getApprovalMode.mockReturnValue(
+        ApprovalMode.AUTO_EDIT,
+      );
       const mockAddItem = vi.fn();
       renderHook(() =>
         useApprovalModeIndicator({
@@ -594,9 +584,11 @@ describe('useApprovalModeIndicator', () => {
     });
 
     expect(mockConfigInstance.setApprovalMode).toHaveBeenCalledWith(
-      ApprovalMode.YOLO,
+      ApprovalMode.AUTO_EDIT,
     );
-    expect(mockOnApprovalModeChange).toHaveBeenCalledWith(ApprovalMode.YOLO);
+    expect(mockOnApprovalModeChange).toHaveBeenCalledWith(
+      ApprovalMode.AUTO_EDIT,
+    );
   });
 
   it('should call onApprovalModeChange when switching to AUTO_EDIT mode', () => {
@@ -624,7 +616,7 @@ describe('useApprovalModeIndicator', () => {
   });
 
   it('should call onApprovalModeChange when switching to DEFAULT mode', () => {
-    mockConfigInstance.getApprovalMode.mockReturnValue(ApprovalMode.YOLO);
+    mockConfigInstance.getApprovalMode.mockReturnValue(ApprovalMode.AUTO_EDIT);
 
     const mockOnApprovalModeChange = vi.fn();
 
@@ -659,7 +651,7 @@ describe('useApprovalModeIndicator', () => {
     });
 
     expect(mockConfigInstance.setApprovalMode).toHaveBeenCalledWith(
-      ApprovalMode.YOLO,
+      ApprovalMode.AUTO_EDIT,
     );
     // Should not throw an error when callback is not provided
   });
@@ -689,7 +681,7 @@ describe('useApprovalModeIndicator', () => {
     expect(mockOnApprovalModeChange).toHaveBeenCalledTimes(2);
     expect(mockOnApprovalModeChange).toHaveBeenNthCalledWith(
       1,
-      ApprovalMode.YOLO,
+      ApprovalMode.AUTO_EDIT,
     );
     expect(mockOnApprovalModeChange).toHaveBeenNthCalledWith(
       2,

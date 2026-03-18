@@ -204,8 +204,7 @@ export class PolicyEngine {
     return (
       !allowRedirection &&
       hasRedirection(command) &&
-      this.approvalMode !== ApprovalMode.AUTO_EDIT &&
-      this.approvalMode !== ApprovalMode.YOLO
+      this.approvalMode !== ApprovalMode.AUTO_EDIT
     );
   }
 
@@ -239,12 +238,8 @@ export class PolicyEngine {
         return { decision: PolicyDecision.DENY, rule };
       }
 
-      // In YOLO mode, we should proceed anyway even if we can't parse the command.
-      if (this.approvalMode === ApprovalMode.YOLO) {
-        return {
-          decision: PolicyDecision.ALLOW,
-          rule,
-        };
+      if (rule?.toolName === '*') {
+        return { decision: PolicyDecision.ALLOW, rule };
       }
 
       debugLogger.debug(
@@ -480,15 +475,6 @@ export class PolicyEngine {
 
     // Default if no rule matched
     if (decision === undefined) {
-      if (this.approvalMode === ApprovalMode.YOLO) {
-        debugLogger.debug(
-          `[PolicyEngine.check] NO MATCH in YOLO mode - using ALLOW`,
-        );
-        return {
-          decision: PolicyDecision.ALLOW,
-        };
-      }
-
       debugLogger.debug(
         `[PolicyEngine.check] NO MATCH - using default decision: ${this.defaultDecision}`,
       );

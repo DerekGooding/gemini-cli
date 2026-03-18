@@ -2081,7 +2081,7 @@ describe('useGeminiStream', () => {
       const { result } = renderTestHook(awaitingApprovalToolCalls);
 
       await act(async () => {
-        await result.current.handleApprovalModeChange(ApprovalMode.YOLO);
+        await result.current.handleApprovalModeChange(ApprovalMode.AUTO_EDIT);
       });
 
       // Both tool calls should be auto-approved
@@ -2157,7 +2157,7 @@ describe('useGeminiStream', () => {
       const { result } = renderTestHook(awaitingApprovalToolCalls);
 
       await act(async () => {
-        await result.current.handleApprovalModeChange(ApprovalMode.YOLO);
+        await result.current.handleApprovalModeChange(ApprovalMode.AUTO_EDIT);
       });
 
       // Both should be attempted despite first error
@@ -2200,7 +2200,7 @@ describe('useGeminiStream', () => {
 
       // Should not throw an error
       await act(async () => {
-        await result.current.handleApprovalModeChange(ApprovalMode.YOLO);
+        await result.current.handleApprovalModeChange(ApprovalMode.AUTO_EDIT);
       });
     });
 
@@ -2242,7 +2242,7 @@ describe('useGeminiStream', () => {
       const { result } = renderTestHook(mixedStatusToolCalls);
 
       await act(async () => {
-        await result.current.handleApprovalModeChange(ApprovalMode.YOLO);
+        await result.current.handleApprovalModeChange(ApprovalMode.AUTO_EDIT);
       });
 
       // Only the awaiting_approval tool should be processed.
