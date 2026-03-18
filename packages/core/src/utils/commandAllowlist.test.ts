@@ -23,44 +23,49 @@ describe('commandAllowlist', () => {
   });
 
   describe('canShowAutoApproveCheckbox', () => {
-    it('should return true for safe commands in default mode', () => {
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['ls']);
-      expect(canShowAutoApproveCheckbox('ls -la', false)).toBe(true);
+    describe('safe commands in default mode', () => {
+      it.each([
+        ['ls -la', ['ls']],
+        ['cat file | grep "test"', ['grep', 'cat']],
+      ])('should return true for %s', (cmd: string, roots: string[]) => {
+        vi.mocked(shellUtils.getCommandRoots).mockReturnValue(roots);
+        expect(canShowAutoApproveCheckbox(cmd, false)).toBe(true);
+      });
+    });
 
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['grep', 'cat']);
-      expect(canShowAutoApproveCheckbox('cat file | grep "test"', false)).toBe(
-        true,
+    describe('edit commands in default mode', () => {
+      it.each([
+        ['mkdir test', ['mkdir']],
+        ['touch file.txt', ['touch']],
+      ])('should return false for %s', (cmd: string, roots: string[]) => {
+        vi.mocked(shellUtils.getCommandRoots).mockReturnValue(roots);
+        expect(canShowAutoApproveCheckbox(cmd, false)).toBe(false);
+      });
+    });
+
+    describe('edit commands in accept-edits mode', () => {
+      it.each([
+        ['mkdir test', ['mkdir']],
+        ['touch file.txt', ['touch']],
+      ])('should return true for %s', (cmd: string, roots: string[]) => {
+        vi.mocked(shellUtils.getCommandRoots).mockReturnValue(roots);
+        expect(canShowAutoApproveCheckbox(cmd, true)).toBe(true);
+      });
+    });
+
+    describe('destructive commands in any mode', () => {
+      it.each([
+        ['rm -rf /', ['rm'], false],
+        ['rm -rf /', ['rm'], true],
+        ['mkfs.ext4 /dev/sda1', ['mkfs'], true],
+        ['format C:', ['format'], true],
+      ])(
+        'should return false for %s in acceptEdits=%s',
+        (cmd: string, roots: string[], isAcceptEdits: boolean) => {
+          vi.mocked(shellUtils.getCommandRoots).mockReturnValue(roots);
+          expect(canShowAutoApproveCheckbox(cmd, isAcceptEdits)).toBe(false);
+        },
       );
-    });
-
-    it('should return false for edit commands in default mode', () => {
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['mkdir']);
-      expect(canShowAutoApproveCheckbox('mkdir test', false)).toBe(false);
-
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['touch']);
-      expect(canShowAutoApproveCheckbox('touch file.txt', false)).toBe(false);
-    });
-
-    it('should return true for edit commands in accept-edits mode', () => {
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['mkdir']);
-      expect(canShowAutoApproveCheckbox('mkdir test', true)).toBe(true);
-
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['touch']);
-      expect(canShowAutoApproveCheckbox('touch file.txt', true)).toBe(true);
-    });
-
-    it('should return false for destructive commands in any mode', () => {
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['rm']);
-      expect(canShowAutoApproveCheckbox('rm -rf /', false)).toBe(false);
-      expect(canShowAutoApproveCheckbox('rm -rf /', true)).toBe(false);
-
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['mkfs']);
-      expect(canShowAutoApproveCheckbox('mkfs.ext4 /dev/sda1', true)).toBe(
-        false,
-      );
-
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['format']);
-      expect(canShowAutoApproveCheckbox('format C:', true)).toBe(false);
     });
 
     it('should return false for pipelines where one command is destructive', () => {
