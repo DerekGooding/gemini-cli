@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   canShowAutoApproveCheckbox,
   extractBaseCommands,
@@ -22,6 +22,10 @@ vi.mock('@google/gemini-cli-core', async (importOriginal) => {
 });
 
 describe('commandAllowlist', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('canShowAutoApproveCheckbox', () => {
     it('should return true for safe commands in default mode', () => {
       vi.mocked(core.getCommandRoots).mockReturnValue(['ls']);
