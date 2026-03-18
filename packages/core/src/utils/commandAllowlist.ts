@@ -11,7 +11,6 @@ export const safeCommandAllowlist = new Set([
   'cat',
   'grep',
   'pwd',
-  'find',
   'echo',
   'head',
   'tail',
@@ -23,8 +22,6 @@ export const safeCommandAllowlist = new Set([
   'clear',
   'history',
   'man',
-  'awk',
-  'sed',
   'sort',
   'uniq',
   'wc',
@@ -45,29 +42,24 @@ export const editCommandAllowlist = new Set([
   'gunzip',
   'unzip',
   'zip',
+  'find',
+  'awk',
+  'sed',
 ]);
-
-export function extractBaseCommands(command: string): string[] {
-  return getCommandRoots(command);
-}
 
 export function canShowAutoApproveCheckbox(
   command: string,
   isAcceptEdits: boolean,
 ): boolean {
-  const baseCommands = extractBaseCommands(command);
+  const baseCommands = getCommandRoots(command);
 
   if (baseCommands.length === 0) {
     return false;
   }
 
-  return baseCommands.every((baseCmd) => {
-    if (safeCommandAllowlist.has(baseCmd)) {
-      return true;
-    }
-    if (isAcceptEdits && editCommandAllowlist.has(baseCmd)) {
-      return true;
-    }
-    return false;
-  });
+  return baseCommands.every(
+    (baseCmd) =>
+      safeCommandAllowlist.has(baseCmd) ||
+      (isAcceptEdits && editCommandAllowlist.has(baseCmd)),
+  );
 }

@@ -5,10 +5,7 @@
  */
 
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import {
-  canShowAutoApproveCheckbox,
-  extractBaseCommands,
-} from './commandAllowlist.js';
+import { canShowAutoApproveCheckbox } from './commandAllowlist.js';
 import * as shellUtils from './shell-utils.js';
 
 // Mock getCommandRoots to test the logic directly without needing the wasm parser to be fully loaded
@@ -74,15 +71,6 @@ describe('commandAllowlist', () => {
     it('should return false if getCommandRoots returns empty (e.g., parsing failed or no command)', () => {
       vi.mocked(shellUtils.getCommandRoots).mockReturnValue([]);
       expect(canShowAutoApproveCheckbox('', true)).toBe(false);
-    });
-  });
-
-  describe('extractBaseCommands', () => {
-    it('should call getCommandRoots from shell-utils', () => {
-      vi.mocked(shellUtils.getCommandRoots).mockReturnValue(['sudo', 'rm']);
-      const roots = extractBaseCommands('sudo rm -rf /');
-      expect(shellUtils.getCommandRoots).toHaveBeenCalledWith('sudo rm -rf /');
-      expect(roots).toEqual(['sudo', 'rm']);
     });
   });
 });
