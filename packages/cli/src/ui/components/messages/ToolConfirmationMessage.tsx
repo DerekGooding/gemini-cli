@@ -43,8 +43,11 @@ import {
   type DeceptiveUrlDetails,
 } from '../../utils/urlSecurityUtils.js';
 import { useKeyMatchers } from '../../hooks/useKeyMatchers.js';
-import { canShowAutoApproveCheckbox } from '../../utils/commandAllowlist.js';
-import { ApprovalMode } from '@google/gemini-cli-core';
+
+import {
+  ApprovalMode,
+  canShowAutoApproveCheckbox,
+} from '@google/gemini-cli-core';
 
 export interface ToolConfirmationMessageProps {
   callId: string;

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getCommandRoots } from '@google/gemini-cli-core';
+import { getCommandRoots } from './shell-utils.js';
 
-export const SafeCommandAllowlist = new Set([
+export const safeCommandAllowlist = new Set([
   'ls',
   'cat',
   'grep',
@@ -32,7 +32,7 @@ export const SafeCommandAllowlist = new Set([
   'ping',
 ]);
 
-export const EditCommandAllowlist = new Set([
+export const editCommandAllowlist = new Set([
   'cp',
   'mv',
   'mkdir',
@@ -62,10 +62,10 @@ export function canShowAutoApproveCheckbox(
   }
 
   return baseCommands.every((baseCmd) => {
-    if (SafeCommandAllowlist.has(baseCmd)) {
+    if (safeCommandAllowlist.has(baseCmd)) {
       return true;
     }
-    if (isAcceptEdits && EditCommandAllowlist.has(baseCmd)) {
+    if (isAcceptEdits && editCommandAllowlist.has(baseCmd)) {
       return true;
     }
     return false;
